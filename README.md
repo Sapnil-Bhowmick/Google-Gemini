@@ -7,3 +7,4 @@ Typing new prompt or clicking any of the cards will add the most recent prompt u
 The "New Chat" option opens up a new chat for the user to type.
 To copy the result obtained ,  there is a copy button which directly copies the raw data(without any tags) returned by the model.
 There is a collapse menu on the top of Sidebar which on clicking will collapse the sidebar resembling the real UI.
+Just Run " npm start " to run the application in react terminal.

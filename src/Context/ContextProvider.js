@@ -1,0 +1,265 @@
+import React from 'react'
+import runChat from '../Config/Gemini'
+
+
+const myContext = React.createContext()
+
+const ContextProvider = ({ children }) => {
+
+  const [loading, setLoading] = React.useState(false)
+  const [input, setInput] = React.useState('')
+  const [recentPrompt, setRecentPrompt] = React.useState('')
+  const [previousPrompts, setPreviousPrompts] = React.useState(['UI', 'UX', 'PGD', 'Dog', 'Cat'])
+  const [showResult, setShowResult] = React.useState(false)
+  const [resultData, setResultData] = React.useState('')
+  const [copied, setCopied] = React.useState(false)
+  const [rawData, setRawData] = React.useState('')
+
+  const [showMore, setShowMore] = React.useState(false)
+  const [morePrompts, setMorePrompts] = React.useState([])
+
+  const ElementsToSlice = 3
+
+  const onSend = async (prompt) => {
+
+    setResultData('')
+    setLoading(true)
+    setShowResult(true)
+    setRecentPrompt(prompt ? prompt : input)
+
+    let response
+
+
+    if (prompt !== undefined) {
+      setRecentPrompt(prompt)
+      response = await runChat(prompt)
+
+      setRawData(response)
+
+    }
+    else if (input !== '') {
+      setRecentPrompt(input)
+      response = await runChat(input)
+
+      setRawData(response)
+
+      // * Most recent prompt should be at the top of  array
+
+      let promptArr = previousPrompts
+      promptArr.unshift(input)
+
+      setPreviousPrompts([...promptArr])
+
+
+    }
+
+
+
+
+    let respArray = response?.split("**")
+
+    const Text = Highlight(respArray)
+
+    // const wrapped = wrapLinkWithATag(Text)
+
+    const wrapped = makeLink(Text)
+
+    let wordsArr = wrapped.split(" ")
+
+
+
+    for (let i = 0; i < (wordsArr.length - 1); i++) {
+      let word = wordsArr[i]
+      DelayWord(i, word + " ")
+    }
+
+
+    setResultData(Text)
+    setLoading(false)
+    setInput('')
+
+  }
+
+
+  const makeLink = (text) => {
+    let arr = text.split(" ")
+    let wrappedText = ""
+
+    for (let i = 0; i < (arr.length - 1); i++) {
+      let newText = wrapLinkWithATag(arr[i])
+
+      wrappedText += newText
+    }
+
+    return wrappedText
+
+  }
+
+  function wrapLinkWithATag(word) {
+    // Regular expression to match URLs starting with http or https
+    var urlRegex = /(https?:\/\/[^\s]+)/g;
+
+    // Replace URLs with <a> tags
+    var newText = word.replace(urlRegex, `<a target='_blank' href=${word}> ${word} </a>`);
+
+    return newText;
+  }
+
+
+
+  const DelayWord = (index, word) => {
+    setTimeout(() => {
+      setResultData((prev) => prev + word)
+    }, 75 * index)
+  }
+
+
+
+
+  const Highlight = (arr) => {
+
+    let HighlitedText = ''
+
+    for (let i = 0; i < (arr?.length - 1); i++) {
+
+      if (i === 0 || i % 2 === 0) {
+        HighlitedText += arr[i]
+      }
+      else if (i % 2 !== 0) {
+        HighlitedText += `</br> <b> ${arr[i]} </b> `
+      }
+    }
+
+    return NewLine(HighlitedText)
+
+  }
+
+
+  const NewLine = (text) => {
+
+    let NewText = text.split("*").join("</br>")
+
+    return NewText
+  }
+
+  const NewChat = () => {
+    setShowResult(false)
+    setInput('')
+  }
+
+
+  const onPressEnter = (e) => {
+    if (e.key === "Enter") {
+      onSend()
+    }
+  }
+
+  const CardPrompt = (prompt) => {
+    setInput(prompt)
+    console.log('card_prompt', prompt)
+    // setRecentPrompt(prompt)
+    onSend(prompt)
+  }
+
+  const copytext = async () => {
+
+    if (window.navigator.clipboard) {
+
+      try {
+        await window.navigator.clipboard.writeText(rawData)
+        setCopied(true)
+      }
+      catch (error) {
+
+        alert('Failed to copy text');
+      }
+    }
+
+    else {
+
+      alert('Clipboard is disbled or Unsupported')
+    }
+
+  }
+
+
+  const handleShowLess = (e) => {
+
+    console.log(e.currentTarget.id)
+
+    setShowMore(!showMore)
+
+
+
+    if (e.currentTarget.id === 'show') {
+
+      let arr = previousPrompts.slice(ElementsToSlice)
+
+      setMorePrompts([...arr])
+
+    }
+    else if (e.currentTarget.id === 'hide') {
+
+      setMorePrompts([])
+
+    }
+
+  }
+
+
+  const slicePrompts = () => {
+    console.log('slice')
+    // let arr = previousPrompts.slice(3)
+
+    // setMorePrompts([...arr])
+  }
+
+
+  return (
+    <myContext.Provider
+      value={{
+        loading,
+        setLoading,
+        onSend,
+        recentPrompt,
+        setRecentPrompt,
+        resultData,
+        showResult,
+        setShowResult,
+        input,
+        setInput,
+        previousPrompts,
+        setPreviousPrompts,
+        NewChat,
+        onPressEnter,
+        CardPrompt,
+        copytext,
+        copied,
+        showMore,
+        setShowMore,
+        handleShowLess,
+        morePrompts,
+        setMorePrompts,
+        slicePrompts,
+        ElementsToSlice
+
+
+      }}>
+
+      {children}
+
+    </myContext.Provider>
+  )
+}
+
+//  * This should be a hook or function  since it is returning statess , functions 
+
+const useContextValues = () => {
+  const ProvidedValues = React.useContext(myContext)
+
+  return ProvidedValues
+}
+
+
+
+export { ContextProvider, useContextValues }

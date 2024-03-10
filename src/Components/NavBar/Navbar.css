@@ -1,0 +1,389 @@
+.nav-main {
+    background-color: #f0f4f9;
+    display: flex;
+    min-height: 100vh;
+
+    animation: coll_Exp_Anime;
+    animation-duration: 2s;
+    animation-timing-function: ease;
+
+    transition: background-color 2s ease-in-out;
+
+}
+
+
+
+
+
+.flex-expand {
+    flex: 1;
+
+    animation: coll_Exp_Anime;
+    animation-duration: 2s;
+    animation-timing-function: ease;
+}
+
+.flex-collapse {
+    flex: 0;
+
+    /* animation: coll_Exp_Anime;
+    animation-duration: 2s;
+    animation-timing-function: ease; */
+}
+
+@keyframes coll_Exp_Anime {
+    0% {
+        background-color: transparent;
+    }
+
+    100% {
+        background-color: #f0f4f9;
+    }
+}
+
+.menu {
+    cursor: pointer;
+}
+
+.nav-wrapper {
+    padding: 32px;
+}
+
+.menu-img {
+    width: 20px;
+    height: 20px;
+}
+
+.plus-img {
+    width: 16px;
+    height: 22px;
+    margin-left: -12px;
+}
+
+.plus-img-collapse {
+    width: 16px;
+    height: 22px;
+}
+
+.collapse-new {
+    margin-top: 4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #e1e1e1;
+    border-radius: 50%;
+    width: 34px;
+    height: 34px;
+    margin-left: -6px;
+    cursor: pointer;
+}
+
+
+.collapse-new:hover {
+    background-color: #d7e2f1;
+}
+
+
+.new-chat {
+    background-color: #e5eaf1;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    width: 9rem;
+    height: 3rem;
+    border-radius: 45px;
+    margin-top: 4rem;
+    margin-left: -9px;
+    cursor: pointer;
+
+    animation: newchatAnime;
+    animation-duration: 1s;
+    animation-timing-function: ease;
+}
+
+@keyframes newchatAnime {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+.new-chat:hover {
+    background-color: #d7e2f1;
+}
+
+.chat-text {
+    color: #707488;
+    font-family: 'Lato';
+    font-size: 17px;
+
+}
+
+.recent-text {
+    margin-bottom: 19px;
+    font-weight: 600;
+}
+
+.prompt-hist {
+    display: flex;
+    align-items: center;
+    height: 2.75rem;
+    border-radius: 45px;
+    margin-left: -15px;
+    padding: 0px 15px;
+    cursor: pointer;
+    justify-content: space-between;
+}
+
+.acive-prompt {
+    display: flex;
+    align-items: center;
+    height: 2.75rem;
+    border-radius: 45px;
+    margin-left: -15px;
+    padding: 0px 15px;
+    cursor: pointer;
+    background-color: #d6e2f0;
+    justify-content: space-between;
+}
+
+
+.prompt-hist:hover {
+    background-color: #e6ebf0;
+}
+
+.loading-prompt {
+    width: 12rem;
+    background-color: antiquewhite;
+    height: 18px;
+    margin-bottom: 12px;
+    border-radius: 39px;
+
+    background: linear-gradient(to right, #d5d6dd, rgb(255, 255, 255), #d5d6dd);
+    background-size: 800px, 50px;
+
+    animation: loadingAnime1;
+    animation-duration: 3s;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out;
+}
+
+
+@keyframes loadingPrompt {
+
+    0% {
+        background-position: -800px 0px;
+    }
+
+    100% {
+        background-position: 800px 0px;
+    }
+
+}
+
+.prompt-text {
+    margin-left: 9px;
+    color: #6e728a;
+    font-family: 'Mulish';
+}
+
+.prompt-msg-div {
+    /* display: flex; */
+    align-items: center;
+}
+
+.msg-icon {
+    width: 20px;
+    height: 21px;
+}
+
+.prompt-div-exp {
+    margin-top: 2rem;
+}
+
+.prompt-div-coll {
+    margin-top: 26rem;
+}
+
+.recent-div {
+    animation: recentDivAnime;
+    animation-duration: 2s;
+    animation-timing-function: ease;
+}
+
+@keyframes recentDivAnime {
+    0% {
+        display: none;
+        opacity: 0
+    }
+
+    100% {
+        display: block;
+        opacity: 1;
+    }
+}
+
+.btn-div {
+    margin-top: 13vmax;
+}
+
+.location-div {
+    display: flex;
+    align-items: center;
+}
+
+.location {
+    background-color: #747775;
+    border-radius: 50%;
+    width: 10px;
+    height: 10px;
+    margin-left: 6px;
+}
+
+.location-text {
+    font-size: 13px;
+    margin-left: 13px;
+    font-weight: bold;
+}
+
+.btn-img {
+    width: 20px;
+    height: 21px;
+}
+
+.btn-single-div-exp {
+    display: flex;
+    align-items: center;
+    margin: 7px 0px;
+    border-radius: 20px;
+    justify-content: space-between;
+    width: 12rem;
+    /* padding: 0px 10px; */
+}
+
+.btn-single-div-coll {
+    display: flex;
+    align-items: center;
+    margin: 7px 0px;
+    border-radius: 20px;
+    justify-content: space-between;
+    width: 0rem;
+}
+
+
+
+.btn-single-div-exp:hover {
+    background-color: #e7ecf2;
+}
+
+.btn-single {
+    display: flex;
+    align-items: center;
+    margin: 7px 0px;
+    position: relative;
+}
+
+.btn-text {
+    margin-left: 9px;
+    font-family: 'Mulish';
+    font-size: 18px;
+}
+
+.active-exp {
+    background-color: #c5221f;
+    border-radius: 50%;
+    width: 10px;
+    height: 10px;
+}
+
+.active-coll {
+    background-color: #c5221f;
+    border-radius: 50%;
+    width: 10px;
+    height: 10px;
+    position: absolute;
+    top: 2px;
+    left: 28px;
+}
+
+.location-div {
+    display: flex;
+    align-items: center;
+    margin: 7px 0px;
+    border-radius: 20px;
+    justify-content: space-between;
+    width: 12rem;
+    /* padding: 0px 10px; */
+    margin-top: 3rem;
+}
+
+
+.dot-img {
+    width: 16px;
+    height: 17px;
+}
+
+.edit-img {
+    width: 14px;
+    height: 14px;
+}
+
+
+
+.dot-div {
+    background-color: #fff;
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+
+}
+
+.edit-del-div {
+    display: flex;
+    padding-left: 4px;
+    width: 4rem;
+    justify-content: space-around;
+    visibility: hidden;
+
+}
+
+.acive-prompt:hover .edit-del-div {
+    visibility: visible;
+}
+
+.prompt-hist:hover .edit-del-div {
+    visibility: visible;
+}
+
+.promptInput {
+    height: 23px;
+    background-color: #fff;
+    border: none;
+    border-radius: 20px;
+}
+
+.up-down-img{
+    height: 16px;
+  width: 17px;
+}
+
+.show-more-text{
+    margin-left: 9px;
+  color: #6e728a;
+  font-family: 'Mulish';
+  font-size: 14px;
+}
+
+.show-btn-div{
+    display: flex;
+  align-items: center;
+  margin: 16px 0px;
+  cursor: pointer;
+}

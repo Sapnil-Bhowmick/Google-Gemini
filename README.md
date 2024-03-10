@@ -6,3 +6,4 @@ The prompt history gets polpulated on the left under the "Recent" tab . Users ca
 Typing new prompt or clicking any of the cards will add the most recent prompt under the Recent prompt section. No new prompt will get added in history if user clicks on any of the pregenerated prompts.
 The "New Chat" option opens up a new chat for the user to type.
 To copy the result obtained ,  there is a copy button which directly copies the raw data(without any tags) returned by the model.
+There is a collapse menu on the top of Sidebar which on clicking will collapse the sidebar resembling the real UI.

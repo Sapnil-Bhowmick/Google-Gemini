@@ -23,7 +23,14 @@ const Navbar = () => {
         morePrompts,
         ElementsToSlice,
         setShowMore,
-        setMorePrompts
+        setMorePrompts,
+        dark,
+        setInput,
+        activeCard,
+        setActiveCard,
+        active,
+        setActive,
+        SelectPrompt
 
     } = useContextValues()
 
@@ -31,7 +38,7 @@ const Navbar = () => {
 
 
     const [expand, setExpand] = React.useState(true)
-    const [active, setActive] = React.useState(0)
+  
     const [edit, setEdit] = React.useState(false)
 
     const [promptInp, setpromptInp] = React.useState('')
@@ -50,10 +57,7 @@ const Navbar = () => {
         setLocation(jsonData)
     }
 
-    const SelectPrompt = async (item_prompt) => {
-        setRecentPrompt(item_prompt)
-        await onSend(item_prompt)
-    }
+    
 
     const Delete = (index) => {
         let arr = previousPrompts
@@ -88,11 +92,11 @@ const Navbar = () => {
 
 
     return (
-        <div className='nav-main' >
+        <div className='nav-main' style={{ backgroundColor: dark ? '#1e1f20' : '#f0f4f9', width: !expand && '6rem' }}>
             <div className={`nav-wrapper ${expand ? 'flex-expand' : 'flex-collapse'}`} >
 
                 <div className='menu' onClick={() => setExpand(!expand)}>
-                    <img src={assets.menu_icon} className='menu-img' />
+                    <img src={dark ? assets.dark_menu : assets.menu_icon} className='menu-img' />
                 </div>
 
                 <div>
@@ -100,9 +104,14 @@ const Navbar = () => {
                         expand ?
 
                             (
-                                <div className='new-chat' onClick={() => NewChat()}>
-                                    <img src={assets.plus_icon} className='plus-img' />
-                                    <span className='chat-text'> New Chat </span>
+                                <div className='new-chat' style={{ backgroundColor: dark && '#45474a' }}
+                                    onClick={() => {
+                                        setActiveCard(null)
+                                        NewChat()
+                                    }}
+                                >
+                                    <img src={dark ? assets.dark_plus : assets.plus_icon} className={dark ? 'plus-img-dark' : 'plus-img'} />
+                                    <span className={`${dark ? 'chat-text-dark' : 'chat-text'}`}> New Chat </span>
                                 </div>
                             ) :
 
@@ -127,7 +136,7 @@ const Navbar = () => {
                                         {
                                             previousPrompts.length !== 0 && (
                                                 <>
-                                                    <div className='recent-text'> Recent </div>
+                                                    <div className='recent-text' style={{ color: dark ? '#fff' : '', fontWeight: dark ? 'bold' : '' }}> Recent </div>
 
                                                     {loading && (<div className='loading-prompt'> </div>)}
                                                 </>
@@ -140,8 +149,10 @@ const Navbar = () => {
 
                                             previousPrompts && previousPrompts.slice(0, ElementsToSlice).map((item, index) => {
                                                 return (
-                                                    <div className={`${active === index ? `${!loading ? 'acive-prompt' : 'prompt-hist'}` : 'prompt-hist'}`}
+                                                    <div className={`${active === index ? `${!loading ? `${dark ? 'dark-active-prompt' : 'acive-prompt'}` : `${dark ? 'prompt-hist-dark' : 'prompt-hist'}`}` : `${dark ? 'prompt-hist-dark' : 'prompt-hist'}`}`}
                                                         onClick={() => {
+                                                            SelectPrompt(item)
+                                                            setActiveCard(null)
                                                             console.log(index)
                                                             setActive(index)
                                                         }}
@@ -149,7 +160,7 @@ const Navbar = () => {
                                                     >
                                                         <div className='prompt-msg-div'>
 
-                                                            <img src={assets.message_icon} className='msg-icon' />
+                                                            <img src={dark ? assets.dark_chat : assets.message_icon} className='msg-icon' />
 
                                                             {
                                                                 edit ?
@@ -158,7 +169,7 @@ const Navbar = () => {
                                                                         <input className='promptInput' value={promptInp} onChange={(e) => setpromptInp(e.target.value)} onKeyDown={(e) => Save_Edit(e, index)} />
                                                                     )
                                                                     :
-                                                                    (<span onClick={() => SelectPrompt(item)} className='prompt-text'> {item.length > 15 ? item.substring(0, 20) + '...' : item} </span>)
+                                                                    (<span  className='prompt-text' style={{ color: dark ? '#f0f4f9' : '#6e728a' }}> {item.length > 15 ? item.substring(0, 20) + '...' : item} </span>)
                                                             }
 
 
@@ -200,16 +211,16 @@ const Navbar = () => {
 
                                                         (
                                                             <div id='show' className='show-btn-div' onClick={(e) => handleShowLess(e)}>
-                                                                <img src={assets.down} className='up-down-img' />
-                                                                <span className='show-more-text'> Show More </span>
+                                                                <img src={dark ? assets.dark_up : assets.down} className='up-down-img' />
+                                                                <span className='show-more-text' style={{ color: dark ? '#f0f4f9' : '#6e728a', fontWeight: dark ? 'bold' : '' }}> Show More </span>
                                                             </div>
 
                                                         )
                                                         :
                                                         (
                                                             <div id='hide' className='show-btn-div' onClick={(e) => handleShowLess(e)}>
-                                                                <img src={assets.up} className='up-down-img' />
-                                                                <span className='show-more-text'> Show Less </span>
+                                                                <img src={dark ? assets.dark_down : assets.up} className='up-down-img' />
+                                                                <span className='show-more-text' style={{ color: dark ? '#f0f4f9' : '#6e728a', fontWeight: dark ? 'bold' : '' }}> Show Less </span>
                                                             </div>
                                                         )
 
@@ -222,7 +233,7 @@ const Navbar = () => {
                                             {
                                                 morePrompts.length !== 0 && morePrompts.map((item, index) => {
                                                     return (
-                                                        <div className={`${active === (index + ElementsToSlice) ? `${!loading ? 'acive-prompt' : 'prompt-hist'}` : 'prompt-hist'}`}
+                                                        <div className={`${active === (index + ElementsToSlice) ? `${!loading ? `${dark ? 'dark-active-prompt' : 'acive-prompt'}` : `${dark ? 'prompt-hist-dark' : 'prompt-hist'}`}` : `${dark ? 'prompt-hist-dark' : 'prompt-hist'}`}`}
                                                             onClick={() => {
                                                                 console.log(index + ElementsToSlice)
                                                                 setActive(index + ElementsToSlice)
@@ -231,7 +242,7 @@ const Navbar = () => {
                                                         >
                                                             <div className='prompt-msg-div'>
 
-                                                                <img src={assets.message_icon} className='msg-icon' />
+                                                                <img src={dark ? assets.dark_chat : assets.message_icon} className='msg-icon' />
 
                                                                 {
                                                                     edit ?
@@ -240,7 +251,7 @@ const Navbar = () => {
                                                                             <input className='promptInput' value={promptInp} onChange={(e) => setpromptInp(e.target.value)} onKeyDown={(e) => Save_Edit(e, index)} />
                                                                         )
                                                                         :
-                                                                        (<span onClick={() => SelectPrompt(item)} className='prompt-text'> {item.length > 15 ? item.substring(0, 20) + '...' : item} </span>)
+                                                                        (<span onClick={() => SelectPrompt(item)} className='prompt-text' style={{ color: dark ? '#f0f4f9' : '#6e728a' }}> {item.length > 15 ? item.substring(0, 20) + '...' : item} </span>)
                                                                 }
 
 
@@ -284,13 +295,13 @@ const Navbar = () => {
 
                 </div>
 
-                <div className='btn-div'>
+                <div className='btn-div' style={{ color: dark ? '#f0f4f9' : '' }}>
 
                     <div className={`${expand ? 'btn-single-div-exp' : 'btn-single-div-coll'}`} >
 
                         <div className='btn-single'>
-                            <img src={assets.question_icon} className='btn-img' />
-                            {expand && (<span className='btn-text'> Help </span>)}
+                            <img src={dark ? assets.dark_help : assets.question_icon} className='btn-img' />
+                            {expand && (<span className='btn-text' > Help </span>)}
                         </div>
 
                         {expand && (<span className={`${expand ? 'active-exp' : 'active-coll'}`}></span>)}
@@ -301,7 +312,7 @@ const Navbar = () => {
                     <div className={`${expand ? 'btn-single-div-exp' : 'btn-single-div-coll'}`} >
 
                         <div className='btn-single'>
-                            <img src={assets.history_icon} className='btn-img' />
+                            <img src={dark ? assets.dark_activity : assets.history_icon} className='btn-img' />
                             {expand && (<span className='btn-text'> Activity </span>)}
                         </div>
 
@@ -310,7 +321,7 @@ const Navbar = () => {
                     <div className={`${expand ? 'btn-single-div-exp' : 'btn-single-div-coll'}`} >
 
                         <div className='btn-single'>
-                            <img src={assets.setting_icon} className='btn-img' />
+                            <img src={dark ? assets.dark_settings : assets.setting_icon} className='btn-img' />
                             {expand && (<span className='btn-text'> Settings </span>)}
                         </div>
 
@@ -326,8 +337,8 @@ const Navbar = () => {
 
                         (
                             <div className={`btn-single-div ${expand ? 'location-div' : 'btn-single-div-coll'}`}>
-                                <div className='location'>  </div>
-                                <span className='location-text'> {location.city} , {location.region} , {location.country_name} </span>
+                                <div className='location' style={{ backgroundColor: dark ? '#30ff30' : '' }}>  </div>
+                                <span className='location-text' style={{ color: dark ? '#7da7f9' : '' }}> {location.city} , {location.region} , {location.country_name} </span>
                             </div>
                         )
                     }

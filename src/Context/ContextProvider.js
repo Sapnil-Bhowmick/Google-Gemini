@@ -18,6 +18,16 @@ const ContextProvider = ({ children }) => {
   const [showMore, setShowMore] = React.useState(false)
   const [morePrompts, setMorePrompts] = React.useState([])
 
+  const [dark, setDark] = React.useState(false)
+
+  const [edit, setEdit] = React.useState(false)
+
+  //  * For active card 
+  const [activeCard, setActiveCard] = React.useState(null)
+
+  // * For active prompt
+  const [active, setActive] = React.useState(null)
+
   const ElementsToSlice = 3
 
   const onSend = async (prompt) => {
@@ -53,18 +63,15 @@ const ContextProvider = ({ children }) => {
 
     }
 
+    // let respArray = response?.split("**")
 
+    // const Text = Highlight(respArray)
 
+    // const wrapped = makeLink(Text)
 
-    let respArray = response?.split("**")
+    // let wordsArr = respArray.split(" ")
 
-    const Text = Highlight(respArray)
-
-    // const wrapped = wrapLinkWithATag(Text)
-
-    const wrapped = makeLink(Text)
-
-    let wordsArr = wrapped.split(" ")
+    let wordsArr = response.split(" ")
 
 
 
@@ -73,12 +80,16 @@ const ContextProvider = ({ children }) => {
       DelayWord(i, word + " ")
     }
 
-
-    setResultData(Text)
     setLoading(false)
     setInput('')
 
   }
+
+  const SelectPrompt = async (item_prompt) => {
+    setInput('')
+    setRecentPrompt(item_prompt)
+    await onSend(item_prompt)
+}
 
 
   const makeLink = (text) => {
@@ -150,7 +161,21 @@ const ContextProvider = ({ children }) => {
 
   const onPressEnter = (e) => {
     if (e.key === "Enter") {
+      setActiveCard(null)
+      setActive(0)
       onSend()
+    }
+  }
+
+  const onPressEnter_EditPrompt = (e, prompt) => {
+
+    // console.log('Prompt_edited' , prompt)
+
+    if (e.key === "Enter") {
+      setEdit(false)
+      setActiveCard(null)
+      setActive(0)
+      onSend(prompt)
     }
   }
 
@@ -241,7 +266,17 @@ const ContextProvider = ({ children }) => {
         morePrompts,
         setMorePrompts,
         slicePrompts,
-        ElementsToSlice
+        ElementsToSlice,
+        dark,
+        setDark,
+        activeCard,
+        setActiveCard,
+        active,
+        setActive,
+        onPressEnter_EditPrompt,
+        SelectPrompt,
+        edit,
+        setEdit
 
 
       }}>

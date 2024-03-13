@@ -2,12 +2,13 @@
     background-color: #f0f4f9;
     display: flex;
     min-height: 100vh;
+    width:26rem;
 
     animation: coll_Exp_Anime;
     animation-duration: 2s;
     animation-timing-function: ease;
 
-    transition: background-color 2s ease-in-out;
+    transition: background-color 2s ease-in-out , width 1s ease-in-out
 
 }
 
@@ -60,6 +61,12 @@
     margin-left: -12px;
 }
 
+.plus-img-dark {
+    width: 18px;
+    height: 18px;
+    margin-left: -12px;
+}
+
 .plus-img-collapse {
     width: 16px;
     height: 22px;
@@ -96,6 +103,8 @@
     margin-left: -9px;
     cursor: pointer;
 
+    transition: background-color 2s ease-in-out;
+
     animation: newchatAnime;
     animation-duration: 1s;
     animation-timing-function: ease;
@@ -120,6 +129,19 @@
     font-family: 'Lato';
     font-size: 17px;
 
+    transition: color 2s ease-in-out;
+
+}
+
+.chat-text-dark {
+    color: #fff;
+    font-family: 'Lato';
+    font-size: 17px;
+    font-weight: 700;
+
+    transition: color 2s ease-in-out;
+
+
 }
 
 .recent-text {
@@ -127,16 +149,7 @@
     font-weight: 600;
 }
 
-.prompt-hist {
-    display: flex;
-    align-items: center;
-    height: 2.75rem;
-    border-radius: 45px;
-    margin-left: -15px;
-    padding: 0px 15px;
-    cursor: pointer;
-    justify-content: space-between;
-}
+
 
 .acive-prompt {
     display: flex;
@@ -150,10 +163,20 @@
     justify-content: space-between;
 }
 
-
-.prompt-hist:hover {
-    background-color: #e6ebf0;
+.dark-active-prompt {
+    display: flex;
+    align-items: center;
+    height: 2.75rem;
+    border-radius: 45px;
+    margin-left: -15px;
+    padding: 0px 15px;
+    cursor: pointer;
+    background-color: #1f426a;
+    justify-content: space-between;
 }
+
+
+
 
 .loading-prompt {
     width: 12rem;
@@ -188,6 +211,8 @@
     margin-left: 9px;
     color: #6e728a;
     font-family: 'Mulish';
+
+    transition: color 2s ease-in-out
 }
 
 .prompt-msg-div {
@@ -228,6 +253,9 @@
 
 .btn-div {
     margin-top: 13vmax;
+    /* color: rgb(0, 0, 0); */
+    
+    transition: color 2s ease;
 }
 
 .location-div {
@@ -348,7 +376,7 @@
 .edit-del-div {
     display: flex;
     padding-left: 4px;
-    width: 4rem;
+    /* width: 4rem; */
     justify-content: space-around;
     visibility: hidden;
 
@@ -358,9 +386,59 @@
     visibility: visible;
 }
 
+
+.prompt-hist {
+    display: flex;
+    align-items: center;
+    height: 2.75rem;
+    border-radius: 45px;
+    margin-left: -15px;
+    padding: 0px 15px;
+    cursor: pointer;
+    justify-content: space-between;
+}
+
+
 .prompt-hist:hover .edit-del-div {
     visibility: visible;
 }
+
+
+.prompt-hist:hover {
+    background-color: #e6ebf0;
+}
+
+
+
+.prompt-hist-dark {
+    display: flex;
+    align-items: center;
+    height: 2.75rem;
+    border-radius: 45px;
+    margin-left: -15px;
+    padding: 0px 15px;
+    cursor: pointer;
+    justify-content: space-between;
+}
+
+
+.prompt-hist-dark:hover .edit-del-div {
+    visibility: visible;
+}
+
+
+.prompt-hist-dark:hover {
+    background-color: #0a1520;
+}
+
+
+
+
+
+
+
+
+
 
 .promptInput {
     height: 23px;
@@ -369,21 +447,21 @@
     border-radius: 20px;
 }
 
-.up-down-img{
+.up-down-img {
     height: 16px;
-  width: 17px;
+    width: 17px;
 }
 
-.show-more-text{
+.show-more-text {
     margin-left: 9px;
-  color: #6e728a;
-  font-family: 'Mulish';
-  font-size: 14px;
+    color: #6e728a;
+    font-family: 'Mulish';
+    font-size: 14px;
 }
 
-.show-btn-div{
+.show-btn-div {
     display: flex;
-  align-items: center;
-  margin: 16px 0px;
-  cursor: pointer;
+    align-items: center;
+    margin: 16px 0px;
+    cursor: pointer;
 }

@@ -5,7 +5,11 @@ import Body from './Components/BodyArea/Body.js'
 
 
 
+
+
 function App() {
+
+
   return (
     <div className='main-div'>
        <Navbar />

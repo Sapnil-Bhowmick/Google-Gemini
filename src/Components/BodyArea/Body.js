@@ -4,7 +4,57 @@ import { assets } from '../../assets/assets'
 import { useContextValues } from '../../Context/ContextProvider'
 import './Body.css'
 
+// import ReactMarkdown from 'react-markdown'
+
+import Markdown from 'react-markdown'
+
 import { cardData } from '../../Data/Data.js'
+
+import runChat from '../../Config/Gemini'
+
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
+
+import { docco } from 'react-syntax-highlighter/dist/esm/styles/hljs';
+
+import remarkGfm from 'remark-gfm'
+
+import rehypeRaw from 'rehype-raw'
+
+// import 'dotenv/config'
+
+// * remarkPlugins={[remarkGfm]}  : For additional features like tables etc . 
+
+
+const HighlightCode = ({ children, content }) => {
+  return (
+    <Markdown
+      remarkPlugins={[remarkGfm]}
+      rehypePlugins={[rehypeRaw]} 
+
+      components={{
+        code({ node, inline, className, children, ...props }) {
+          const match = /language-(\w+)/.exec(className || '')
+
+          return !inline && match ? (
+            <SyntaxHighlighter
+              style={docco}
+              PreTag="div"
+              language={match[1]}
+              children={String(children).replace(/\n$/, '')}
+              {...props}
+            />
+          ) : (
+            <code className={className ? className : ''} {...props}>
+              {children}
+            </code>
+          )
+        },
+      }}
+    >
+      {content}
+    </Markdown>
+  )
+}
 
 
 const Body = () => {
@@ -24,10 +74,32 @@ const Body = () => {
     copied,
     slicePrompts,
     setShowMore,
-    setMorePrompts
+    setMorePrompts,
+    dark,
+    setDark,
+    activeCard,
+    setActiveCard,
+    setActive,
+    onPressEnter_EditPrompt,
+    SelectPrompt,
+    edit,
+    setEdit
+
+
   } = useContextValues()
 
+
+
+  // console.log('APIKEY', process.env.)
+
+  const updateRef = React.useRef()
+
   const [card, setCard] = React.useState([])
+
+  const [isdisabled, setIsdisbled] = React.useState(true)
+
+  const [editedPrompt, setEditedPrompt] = React.useState('')
+
 
   React.useEffect(() => { UniqueRandomCards() }, [])
 
@@ -51,10 +123,60 @@ const Body = () => {
   }
 
 
+  const handleCardIconfn = async (original_prompt) => {
+
+    let Instruction = `Given prompt '${original_prompt}'. Generate a 
+    customized prompt for this in short. The generated prompt should be identical in meaning with the original prompt`
+
+    console.log('instruction', Instruction)
+
+    let resp = await runChat(Instruction)
+
+    console.log('Prompt_generated', resp)
+
+    setInput(resp)
+  }
+
+
+  const handleEditPrompt = (e) => {
+
+    let CurrentValue = e.target.value
+    // console.log('value' , CurrentValue)
+    setEditedPrompt(e.target.value)
+
+    // console.log('bool' , JSON.stringify(recentPrompt) === JSON.stringify(CurrentValue))
+    console.log('btn_info', updateRef.current.disabled)
+
+    if (recentPrompt.length !== CurrentValue.length) {
+      console.log('not Equal')
+
+      updateRef.current.style.backgroundColor = 'blue'
+      updateRef.current.style.color = '#fff'
+      setIsdisbled(false)
+
+
+      console.log('btn_info', updateRef.current)
+
+    }
+    else if (JSON.stringify(recentPrompt) === JSON.stringify(CurrentValue)) {
+      console.log('Equal')
+
+      updateRef.current.style.backgroundColor = '#bfc5ca;'
+      updateRef.current.style.color = '#898a8a'
+      setIsdisbled(true)
+
+    }
+  }
+
+  const tableStruct = `
+  | heading | b  |  c |  d  |
+  | - | :- | -: | :-: |
+  | cell 1 | cell 2 | 3 | 4 | 
+  `;
 
 
   return (
-    <div className='body-main'>
+    <div className='body-main' style={{ backgroundColor: dark ? '#131314' : '#fff' }}>
       {/* <div className='body-wrapper'> */}
 
       <div className='body-section'>
@@ -62,7 +184,18 @@ const Body = () => {
         <div className='hero-div'>
           <span className='gemini'> Gemini </span>
 
-          <img src={assets.user_icon} className='user-img' />
+          <div className='light-dark'>
+            <img src={assets.user_icon} className='user-img' />
+            <div onClick={() => setDark(!dark)}>
+              {
+                dark ?
+                  (<img src={assets.moon} className='light-dark-img' />)
+                  :
+                  (<img src={assets.sun} className='light-dark-img' />)
+              }
+
+            </div>
+          </div>
 
         </div>
 
@@ -77,8 +210,66 @@ const Body = () => {
 
                   <div className='user-div'>
                     <img src={assets.user_icon} className='img' />
-                    <div style={{ margin: '0px 23px' }}> {recentPrompt} </div>
+
+                    {
+                      edit ?
+
+                        (
+                          <textarea className={dark ? 'textarea-dark' : 'textarea-light'} value={editedPrompt}
+                            onChange={(e) => handleEditPrompt(e)}
+                            onKeyDown={(e) => {
+                              onPressEnter_EditPrompt(e, editedPrompt)
+                            }}
+                          ></textarea>
+                        )
+                        :
+                        (
+                          <div className={`${dark ? 'recent-prompt-dark' : 'recent-prompt-light'}`}> {recentPrompt} </div>
+                        )
+
+                    }
+
+                    {
+                      !loading && (
+
+                        <div className='edit-prt'
+                          onClick={() => {
+                            setEditedPrompt(recentPrompt)
+                            setEdit(true)
+                          }
+                          }
+                        >
+                          <img src={assets.edit} className='edit-prt-img' />
+                        </div>
+
+                      )
+                    }
+
+
+
                   </div>
+
+                  {
+                    edit &&
+
+                    (
+                      <div className='cancel-update'>
+                        <div className='btn-margin cancel' onClick={() => setEdit(false)}> Cancel </div>
+                        <button disabled={isdisabled}
+                          ref={updateRef}
+                          className='btn-margin update'
+                          onClick={() => {
+                            setEdit(false)
+                            SelectPrompt(editedPrompt)
+                          }}
+                        >
+                          Update
+                        </button>
+                      </div>
+                    )
+                  }
+
+
 
                   <div className='gemini-resp-div'>
 
@@ -110,12 +301,13 @@ const Body = () => {
                         (
 
                           <>
-                            <div className='gemini-text' dangerouslySetInnerHTML={{ __html: resultData }}>
+                            <div className='gemini-text' style={{ color: dark && '#fff' }}>
+                              <HighlightCode content={resultData} />
                             </div>
 
-                            <div onClick={() => copytext()} style={{ cursor: 'pointer' }}>
+                            <div onClick={() => copytext()} style={{ backgroundColor: dark && '#4a5259' }} className='copy-img'>
                               {
-                                copied ? (<img src={assets.copied} />) : (<img src={assets.copy} />)
+                                copied ? (<img src={dark ? assets.dark_copied : assets.copied} />) : (<img src={dark ? assets.dark_copy : assets.copy} />)
                               }
 
                             </div>
@@ -141,7 +333,7 @@ const Body = () => {
 
                   <div className='body-title'>
                     <span className='span-1'>  Hello, User  </span> <br />
-                    <span className='span-2'> How can I help you today? </span>
+                    <span className='span-2' style={{ color: dark ? '#434544' : '' }}> How can I help you today? </span>
                   </div>
 
                   <div className='cards'>
@@ -151,15 +343,20 @@ const Body = () => {
                     {
                       card.length !== 0 && card.map((item, index) => {
                         return (
-                          <div className='single-card' key={index} onClick={() => CardPrompt(item.title)}>
-                            <div className='card-text'>
+                          <div className={dark ? `single-card-dark ${index === activeCard && 'bg-card-dark'}` : `single-card-light ${index === activeCard && 'bg-card-light'}`}
+                            key={index}
+                            onClick={() => CardPrompt(item.title)}
+                          >
+
+                            <div className='card-text' style={{ color: dark ? 'rgb(193, 153, 232)' : '#707575' }}>
                               {item.title}
                             </div>
 
-                            <div className='card-icon-div'
+                            <div className='card-icon-div' style={{ backgroundColor: dark ? '#c3c6ff' : '' }}
                               onClick={(e) => {
+                                setActiveCard(index)
                                 e.stopPropagation()
-                                setInput(item.title)
+                                handleCardIconfn(item.title)
                               }}
                             >
                               <img src={assets.edit} className='card-icon' />
@@ -182,24 +379,27 @@ const Body = () => {
 
           <div className='inp-div-beforeresp'>
             <div className='inp-div-1'>
-              <input id='inpTag' type='text' placeholder='Enter a prompt here' className='inp' value={input}
+              <input id='inpTag' type='text' placeholder='Enter a prompt here' className={`${dark ? 'inp-dark' : 'inp'}`}
+                value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={(e) => onPressEnter(e)}
               />
-              <div className='inp-icons'>
-                <img src={assets.gallery_icon} className='photo-mic' />
-                <img src={assets.mic_icon} className='photo-mic' />
+              <div className='inp-icons' style={{ backgroundColor: dark ? '#323335' : '' }}>
+                <img src={dark ? assets.dark_img : assets.gallery_icon} className='photo-mic' />
+                <img src={dark ? assets.dark_mic : assets.mic_icon} className='photo-mic' />
 
                 <span style={{ opacity: input !== '' ? 1 : 0.2, cursor: input !== '' ? 'pointer' : '' }}>
 
                   {
                     input !== '' && (
-                      <img src={assets.send_icon} className='photo-mic'
+                      <img src={dark ? assets.dark_send : assets.send_icon} className='photo-mic'
                         onClick={() => {
                           onSend()
+                          setActive(0)
+                          setActiveCard(null)
                           setShowMore(false)
                           setMorePrompts([])
-                          
+
                         }
                         }
                       />
@@ -210,7 +410,7 @@ const Body = () => {
 
               </div>
             </div>
-            <p className='warning-text'> Gemini may display inaccurate info, including about people, so double-check its responses. Your privacy and Gemini Apps </p>
+            <p className='warning-text' style={{ color: dark ? '#fff' : '' }}> Gemini may display inaccurate info, including about people, so double-check its responses. Your privacy and Gemini Apps </p>
           </div>
 
         </div >

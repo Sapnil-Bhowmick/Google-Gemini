@@ -9,7 +9,7 @@ const ContextProvider = ({ children }) => {
   const [loading, setLoading] = React.useState(false)
   const [input, setInput] = React.useState('')
   const [recentPrompt, setRecentPrompt] = React.useState('')
-  const [previousPrompts, setPreviousPrompts] = React.useState(['UI', 'UX', 'PGD', 'Dog', 'Cat'])
+  const [previousPrompts, setPreviousPrompts] = React.useState([])
   const [showResult, setShowResult] = React.useState(false)
   const [resultData, setResultData] = React.useState('')
   const [copied, setCopied] = React.useState(false)
@@ -21,6 +21,8 @@ const ContextProvider = ({ children }) => {
   const [dark, setDark] = React.useState(false)
 
   const [edit, setEdit] = React.useState(false)
+
+
 
   //  * For active card 
   const [activeCard, setActiveCard] = React.useState(null)
@@ -39,28 +41,39 @@ const ContextProvider = ({ children }) => {
 
     let response
 
+    try {
 
-    if (prompt !== undefined) {
-      setRecentPrompt(prompt)
-      response = await runChat(prompt)
+      if (prompt !== undefined) {
+        setRecentPrompt(prompt)
+        response = await runChat(prompt)
 
-      setRawData(response)
+        setRawData(response)
 
+      }
+      else if (input !== '') {
+        setRecentPrompt(input)
+        response = await runChat(input)
+
+        setRawData(response)
+
+        // * Most recent prompt should be at the top of  array
+
+        let promptArr = previousPrompts
+        promptArr.unshift(input)
+
+        setPreviousPrompts([...promptArr])
+
+
+      }
     }
-    else if (input !== '') {
-      setRecentPrompt(input)
-      response = await runChat(input)
-
+    catch(error){
+      // alert("Some error Occured..." , error)
+      
+      HandleError(error.response)
+      // console.log(error.response)
+      // console.log('error occured' , Object.keys(error))
       setRawData(response)
-
-      // * Most recent prompt should be at the top of  array
-
-      let promptArr = previousPrompts
-      promptArr.unshift(input)
-
-      setPreviousPrompts([...promptArr])
-
-
+      setShowResult(false)
     }
 
     // let respArray = response?.split("**")
@@ -71,11 +84,11 @@ const ContextProvider = ({ children }) => {
 
     // let wordsArr = respArray.split(" ")
 
-    let wordsArr = response.split(" ")
+    let wordsArr = response?.split(" ")
 
 
 
-    for (let i = 0; i < (wordsArr.length - 1); i++) {
+    for (let i = 0; i < (wordsArr?.length - 1); i++) {
       let word = wordsArr[i]
       DelayWord(i, word + " ")
     }
@@ -89,8 +102,18 @@ const ContextProvider = ({ children }) => {
     setInput('')
     setRecentPrompt(item_prompt)
     await onSend(item_prompt)
-}
+  }
 
+
+  const HandleError = (err_object) => {
+    if (err_object.promptFeedback.blockReason ===  "SAFETY"){
+      alert('Content is Blocked due to Safety. Try a different prompt')
+    }
+    else{
+      alert('Model is overloaded. Try sometime later')
+    }
+    
+  }
 
   const makeLink = (text) => {
     let arr = text.split(" ")
@@ -161,6 +184,8 @@ const ContextProvider = ({ children }) => {
 
   const onPressEnter = (e) => {
     if (e.key === "Enter") {
+      setShowMore(false)
+      setMorePrompts([])
       setActiveCard(null)
       setActive(0)
       onSend()
@@ -181,7 +206,7 @@ const ContextProvider = ({ children }) => {
 
   const CardPrompt = (prompt) => {
     setInput(prompt)
-    console.log('card_prompt', prompt)
+    // console.log('card_prompt', prompt)
     // setRecentPrompt(prompt)
     onSend(prompt)
   }
@@ -210,7 +235,7 @@ const ContextProvider = ({ children }) => {
 
   const handleShowLess = (e) => {
 
-    console.log(e.currentTarget.id)
+    // console.log(e.currentTarget.id)
 
     setShowMore(!showMore)
 
@@ -233,7 +258,7 @@ const ContextProvider = ({ children }) => {
 
 
   const slicePrompts = () => {
-    console.log('slice')
+    // console.log('slice')
     // let arr = previousPrompts.slice(3)
 
     // setMorePrompts([...arr])
@@ -276,7 +301,7 @@ const ContextProvider = ({ children }) => {
         onPressEnter_EditPrompt,
         SelectPrompt,
         edit,
-        setEdit
+        setEdit,
 
 
       }}>

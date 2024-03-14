@@ -128,11 +128,11 @@ const Body = () => {
     let Instruction = `Given prompt '${original_prompt}'. Generate a 
     customized prompt for this in short. The generated prompt should be identical in meaning with the original prompt`
 
-    console.log('instruction', Instruction)
+    // console.log('instruction', Instruction)
 
     let resp = await runChat(Instruction)
 
-    console.log('Prompt_generated', resp)
+    // console.log('Prompt_generated', resp)
 
     setInput(resp)
   }
@@ -145,21 +145,21 @@ const Body = () => {
     setEditedPrompt(e.target.value)
 
     // console.log('bool' , JSON.stringify(recentPrompt) === JSON.stringify(CurrentValue))
-    console.log('btn_info', updateRef.current.disabled)
+    // console.log('btn_info', updateRef.current.disabled)
 
     if (recentPrompt.length !== CurrentValue.length) {
-      console.log('not Equal')
+      // console.log('not Equal')
 
       updateRef.current.style.backgroundColor = 'blue'
       updateRef.current.style.color = '#fff'
       setIsdisbled(false)
 
 
-      console.log('btn_info', updateRef.current)
+      // console.log('btn_info', updateRef.current)
 
     }
     else if (JSON.stringify(recentPrompt) === JSON.stringify(CurrentValue)) {
-      console.log('Equal')
+      // console.log('Equal')
 
       updateRef.current.style.backgroundColor = '#bfc5ca;'
       updateRef.current.style.color = '#898a8a'
@@ -168,12 +168,7 @@ const Body = () => {
     }
   }
 
-  const tableStruct = `
-  | heading | b  |  c |  d  |
-  | - | :- | -: | :-: |
-  | cell 1 | cell 2 | 3 | 4 | 
-  `;
-
+  
 
   return (
     <div className='body-main' style={{ backgroundColor: dark ? '#131314' : '#fff' }}>

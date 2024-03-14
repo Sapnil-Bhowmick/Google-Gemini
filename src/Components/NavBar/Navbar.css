@@ -147,6 +147,8 @@
 .recent-text {
     margin-bottom: 19px;
     font-weight: 600;
+
+    transition: all 2s ease-in-out;
 }
 
 

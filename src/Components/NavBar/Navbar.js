@@ -3,6 +3,10 @@ import './Navbar.css'
 
 import { assets } from '../../assets/assets.js'
 import { useContextValues } from '../../Context/ContextProvider'
+import SinglePromptHist from './SinglePromptHist'
+import SinglePromptMoreHist from './SinglePromptMoreHist'
+
+
 
 
 
@@ -30,20 +34,22 @@ const Navbar = () => {
         setActiveCard,
         active,
         setActive,
-        SelectPrompt
+        SelectPrompt,
+
 
     } = useContextValues()
 
 
 
 
-    const [expand, setExpand] = React.useState(true)
-  
-    const [edit, setEdit] = React.useState(false)
 
-    const [promptInp, setpromptInp] = React.useState('')
+    const [expand, setExpand] = React.useState(true)
+
+    // const [edit, setEdit] = React.useState(false)
 
     const [location, setLocation] = React.useState({})
+
+    // const [editIndex, setEditIndex] = React.useState(null)
 
 
     React.useEffect(() => { getMyLocation() }, [])
@@ -57,36 +63,6 @@ const Navbar = () => {
         setLocation(jsonData)
     }
 
-    
-
-    const Delete = (index) => {
-        let arr = previousPrompts
-        arr.splice(index, 1)
-
-        setPreviousPrompts([...arr])
-    }
-
-    const Edit = (index) => {
-        setEdit(true)
-
-        let arr = previousPrompts
-        setpromptInp(arr[index])
-
-    }
-
-    const Save_Edit = (e, index) => {
-
-        if (e.key === "Enter") {
-            let arr = previousPrompts
-            arr[index] = promptInp
-
-            setPreviousPrompts([...arr])
-
-            setEdit(false)
-        }
-
-
-    }
 
 
 
@@ -149,50 +125,7 @@ const Navbar = () => {
 
                                             previousPrompts && previousPrompts.slice(0, ElementsToSlice).map((item, index) => {
                                                 return (
-                                                    <div className={`${active === index ? `${!loading ? `${dark ? 'dark-active-prompt' : 'acive-prompt'}` : `${dark ? 'prompt-hist-dark' : 'prompt-hist'}`}` : `${dark ? 'prompt-hist-dark' : 'prompt-hist'}`}`}
-                                                        onClick={() => {
-                                                            SelectPrompt(item)
-                                                            setActiveCard(null)
-                                                            console.log(index)
-                                                            setActive(index)
-                                                        }}
-                                                        key={index}
-                                                    >
-                                                        <div className='prompt-msg-div'>
-
-                                                            <img src={dark ? assets.dark_chat : assets.message_icon} className='msg-icon' />
-
-                                                            {
-                                                                edit ?
-
-                                                                    (
-                                                                        <input className='promptInput' value={promptInp} onChange={(e) => setpromptInp(e.target.value)} onKeyDown={(e) => Save_Edit(e, index)} />
-                                                                    )
-                                                                    :
-                                                                    (<span  className='prompt-text' style={{ color: dark ? '#f0f4f9' : '#6e728a' }}> {item.length > 15 ? item.substring(0, 20) + '...' : item} </span>)
-                                                            }
-
-
-                                                        </div>
-
-                                                        <div className='edit-del-div'>
-                                                            <div className='dot-div'
-                                                                onClick={() => {
-                                                                    setShowMore(false)
-                                                                    setMorePrompts([])
-                                                                    Delete(index)
-                                                                }} >
-                                                                <img src={assets.Delete} className='dot-img' />
-                                                            </div>
-
-                                                            <div className='dot-div' onClick={() => Edit(index)} >
-                                                                <img src={assets.edit} className='edit-img' />
-                                                            </div>
-                                                        </div>
-
-
-
-                                                    </div>
+                                                    <SinglePromptHist key={index} item={item} index={index} />
                                                 )
                                             })
 
@@ -233,43 +166,7 @@ const Navbar = () => {
                                             {
                                                 morePrompts.length !== 0 && morePrompts.map((item, index) => {
                                                     return (
-                                                        <div className={`${active === (index + ElementsToSlice) ? `${!loading ? `${dark ? 'dark-active-prompt' : 'acive-prompt'}` : `${dark ? 'prompt-hist-dark' : 'prompt-hist'}`}` : `${dark ? 'prompt-hist-dark' : 'prompt-hist'}`}`}
-                                                            onClick={() => {
-                                                                console.log(index + ElementsToSlice)
-                                                                setActive(index + ElementsToSlice)
-                                                            }}
-                                                            key={index}
-                                                        >
-                                                            <div className='prompt-msg-div'>
-
-                                                                <img src={dark ? assets.dark_chat : assets.message_icon} className='msg-icon' />
-
-                                                                {
-                                                                    edit ?
-
-                                                                        (
-                                                                            <input className='promptInput' value={promptInp} onChange={(e) => setpromptInp(e.target.value)} onKeyDown={(e) => Save_Edit(e, index)} />
-                                                                        )
-                                                                        :
-                                                                        (<span onClick={() => SelectPrompt(item)} className='prompt-text' style={{ color: dark ? '#f0f4f9' : '#6e728a' }}> {item.length > 15 ? item.substring(0, 20) + '...' : item} </span>)
-                                                                }
-
-
-                                                            </div>
-
-                                                            <div className='edit-del-div'>
-                                                                <div className='dot-div' onClick={() => Delete(index)} >
-                                                                    <img src={assets.Delete} className='dot-img' />
-                                                                </div>
-
-                                                                <div className='dot-div' onClick={() => Edit(index)} >
-                                                                    <img src={assets.edit} className='edit-img' />
-                                                                </div>
-                                                            </div>
-
-
-
-                                                        </div>
+                                                        <SinglePromptMoreHist  key={index} item={item} index={index} />
                                                     )
                                                 })
 

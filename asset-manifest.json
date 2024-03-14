@@ -1,16 +1,16 @@
 {
   "files": {
-    "main.css": "/Google-Gemini/static/css/main.381e2017.css",
-    "main.js": "/Google-Gemini/static/js/main.04c5d094.js",
+    "main.css": "/Google-Gemini/static/css/main.17f55037.css",
+    "main.js": "/Google-Gemini/static/js/main.81827850.js",
     "static/js/453.9dcff879.chunk.js": "/Google-Gemini/static/js/453.9dcff879.chunk.js",
     "static/media/gallery_icon.png": "/Google-Gemini/static/media/gallery_icon.1da1416be560b7741007.png",
     "index.html": "/Google-Gemini/index.html",
-    "main.381e2017.css.map": "/Google-Gemini/static/css/main.381e2017.css.map",
-    "main.04c5d094.js.map": "/Google-Gemini/static/js/main.04c5d094.js.map",
+    "main.17f55037.css.map": "/Google-Gemini/static/css/main.17f55037.css.map",
+    "main.81827850.js.map": "/Google-Gemini/static/js/main.81827850.js.map",
     "453.9dcff879.chunk.js.map": "/Google-Gemini/static/js/453.9dcff879.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.381e2017.css",
-    "static/js/main.04c5d094.js"
+    "static/css/main.17f55037.css",
+    "static/js/main.81827850.js"
   ]
 }

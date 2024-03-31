@@ -1,3 +1,10 @@
+## SnapShot of the Application
+___
+
+![gemini](https://github.com/Sapnil-Bhowmick/Google-Gemini/assets/118714419/bd12f234-50f0-43e1-8abc-3b0b8e7044c2)
+
+
+
 ## About Gemini Model built by GOOGLE 
 ___
 

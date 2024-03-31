@@ -46,3 +46,10 @@ ___
 ___
 
 * There can be different icons in cards like for navigating , generating images and so on.
+
+* ## Warning !
+___
+
+* Currently safety settings are being implemented for some kinds of category. Hence results for such kind of queries would not be generated. An aleart box will be shown in such cases.
+* Press "OK" to continue and try a different query.
+  
